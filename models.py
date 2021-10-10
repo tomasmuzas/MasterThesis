@@ -1,5 +1,5 @@
 import tensorflow
-from tensorflow.keras.layers import Conv2D, MaxPool2D, GlobalAveragePooling2D, Dense, Input
+from tensorflow.keras.layers import Conv2D, MaxPool2D, GlobalAveragePooling2D, Dense, Input, Dropout
 from tensorflow.keras import Sequential
 from tensorflow.keras import layers as Layers
 from tensorflow.keras.applications import ResNet50
