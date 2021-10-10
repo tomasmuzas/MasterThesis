@@ -1,6 +1,10 @@
 import tensorflow
 from tensorflow.keras.layers import Conv2D, MaxPool2D, GlobalAveragePooling2D, Dense, Input
 from tensorflow.keras import layers as Layers
+from tensorflow.keras.applications import ResNet50
+from tensorflow.keras.applications.inception_resnet_v2 import InceptionResNetV2
+from tensorflow.keras.applications.inception_v3 import InceptionV3
+from tensorflow.keras.applications.resnet import ResNet101
 
 def ConvBlockNoResidual(channels, depth, size, initial_stride = 1, pad_input=False, name="ConvBlock"):
   inputs = x = Layers.Input(shape=(size, size, channels if pad_input == 0 else (channels // 2)))
