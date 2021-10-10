@@ -36,7 +36,7 @@ class LoggingCallback(tf.keras.callbacks.Callback):
     def on_epoch_end(self, epoch, logs=None):
         model_name = f"{self.model_name}/{self.folder_name}"
         path = f"./drive/MyDrive/MTD/Models/{model_name}"
-        if (epoch == 1):
+        if (epoch == 0):
           os.makedirs(path, exist_ok=True)
           f = open(path + "/logs.txt", "w")
           f.write(f"loss: {logs['loss']:.4f}, categorical_accuracy: {logs['categorical_accuracy']:.4f}, val_loss: {logs['val_loss']:.4f}, val_categorical_accuracy: {logs['val_categorical_accuracy']:.4f}\n")
