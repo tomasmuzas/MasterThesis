@@ -36,28 +36,44 @@ def ConvBlock(channels, depth, size, initial_stride = 1, pad_input=False, name="
 
   return tensorflow.keras.Model(inputs=inputs, outputs=last_layer_output, name=name)
 
-def Custom34Model(classes, image_size):
+def Custom34Model(classes, image_size, dropout_rate):
   model = Sequential(name="Custom34")
   model.add(Input(shape=(image_size, image_size, 3)))
   model.add(Conv2D(filters=64, kernel_size=7, strides=2, padding='same', name="Conv1"))   
   model.add(MaxPool2D(3, strides=2, padding='same', name="Conv2_MaxPool"))
   model.add(ConvBlockNoResidual(64, 3, image_size // 4, initial_stride = 1, pad_input = False, name="Conv2"))
+  if dropout_rate != 0:
+    model.add(Dropout(dropout_rate))
   model.add(ConvBlockNoResidual(128, 4, image_size // 4, initial_stride = 2, pad_input = True, name="Conv3"))
+  if dropout_rate != 0:
+    model.add(Dropout(dropout_rate))
   model.add(ConvBlockNoResidual(256, 6, image_size // 8, initial_stride = 2, pad_input = True, name="Conv4"))
+  if dropout_rate != 0:
+    model.add(Dropout(dropout_rate))
   model.add(ConvBlockNoResidual(512, 3, image_size // 16, initial_stride = 2, pad_input = True, name="Conv5"))
+  if dropout_rate != 0:
+    model.add(Dropout(dropout_rate))
   model.add(GlobalAveragePooling2D())
   model.add(Dense(classes, activation='softmax'))
   return model
 
-def Custom8Model(classes, image_size):
+def Custom8Model(classes, image_size, dropout_rate):
   model = Sequential(name="Custom18")
   model.add(Input(shape=(image_size, image_size, 3)))
   model.add(Conv2D(filters=64, kernel_size=7, strides=2, padding='same', name="Conv1"))   
   model.add(MaxPool2D(3, strides=2, padding='same', name="Conv2_MaxPool"))
   model.add(ConvBlockNoResidual(64, 1, image_size // 4, initial_stride = 1, pad_input = False, name="Conv2"))
+  if dropout_rate != 0:
+    model.add(Dropout(dropout_rate))
   model.add(ConvBlockNoResidual(128, 1, image_size // 4, initial_stride = 2, pad_input = True, name="Conv3"))
+  if dropout_rate != 0:
+    model.add(Dropout(dropout_rate))
   model.add(ConvBlockNoResidual(256, 1, image_size // 8, initial_stride = 2, pad_input = True, name="Conv4"))
+  if dropout_rate != 0:
+    model.add(Dropout(dropout_rate))
   model.add(ConvBlockNoResidual(512, 1, image_size // 16, initial_stride = 2, pad_input = True, name="Conv5"))
+  if dropout_rate != 0:
+    model.add(Dropout(dropout_rate))
   model.add(GlobalAveragePooling2D())
   model.add(Dense(classes, activation='softmax'))
   return model
@@ -80,81 +96,110 @@ def Custom6Model(classes, image_size, dropout_rate):
   model.add(Dense(classes, activation='softmax'))
   return model
 
-def ResNet6Model(classes):
+def ResNet6Model(classes, image_size, dropout_rate):
   model = Sequential(name="Custom6")
-  model.add(Input(shape=(224, 224, 3)))
+  model.add(Input(shape=(image_size, image_size, 3)))
   model.add(Conv2D(filters=64, kernel_size=7, strides=2, padding='same', name="Conv1"))   
   model.add(MaxPool2D(3, strides=2, padding='same', name="Conv2_MaxPool"))
-  model.add(ConvBlock(64, 1, 56, initial_stride = 1, pad_input = False, name="Conv2"))
-  model.add(ConvBlock(128, 1, 56, initial_stride = 2, pad_input = True, name="Conv3"))
-  model.add(ConvBlock(256, 1, 28, initial_stride = 2, pad_input = True, name="Conv4"))
+  model.add(ConvBlock(64, 1, image_size // 4, initial_stride = 1, pad_input = False, name="Conv2"))
+  if dropout_rate != 0:
+    model.add(Dropout(dropout_rate))
+  model.add(ConvBlock(128, 1, image_size // 4, initial_stride = 2, pad_input = True, name="Conv3"))
+  if dropout_rate != 0:
+    model.add(Dropout(dropout_rate))
+  model.add(ConvBlock(256, 1, image_size // 8, initial_stride = 2, pad_input = True, name="Conv4"))
+  if dropout_rate != 0:
+    model.add(Dropout(dropout_rate))
   model.add(GlobalAveragePooling2D())
   model.add(Dense(classes, activation='softmax'))
   return model
 
-def ResNet34Model(classes):
+def ResNet34Model(classes, image_size, dropout_rate):
   model = Sequential(name="ResNet34")
-  model.add(Input(shape=(224, 224, 3)))
+  model.add(Input(shape=(image_size, image_size, 3)))
   model.add(Conv2D(filters=64, kernel_size=7, strides=2, padding='same', name="Conv1"))   
   model.add(MaxPool2D(3, strides=2, padding='same', name="Conv2_MaxPool"))
-  model.add(ConvBlock(64, 3, 56, initial_stride = 1, pad_input = False, name="Conv2"))
-  model.add(ConvBlock(128, 4, 56, initial_stride = 2, pad_input = True, name="Conv3"))
-  model.add(ConvBlock(256, 6, 28, initial_stride = 2, pad_input = True, name="Conv4"))
-  model.add(ConvBlock(512, 3, 14, initial_stride = 2, pad_input = True, name="Conv5"))
+  model.add(ConvBlock(64, 3, image_size // 4, initial_stride = 1, pad_input = False, name="Conv2"))
+  if dropout_rate != 0:
+    model.add(Dropout(dropout_rate))
+  model.add(ConvBlock(128, 4, image_size // 4, initial_stride = 2, pad_input = True, name="Conv3"))
+  if dropout_rate != 0:
+    model.add(Dropout(dropout_rate))
+  model.add(ConvBlock(256, 6, image_size // 8, initial_stride = 2, pad_input = True, name="Conv4"))
+  if dropout_rate != 0:
+    model.add(Dropout(dropout_rate))
+  model.add(ConvBlock(512, 3, image_size // 16, initial_stride = 2, pad_input = True, name="Conv5"))
+  if dropout_rate != 0:
+    model.add(Dropout(dropout_rate))
   model.add(GlobalAveragePooling2D())
   model.add(Dense(classes, activation='softmax'))
   return model
 
-def ResNet18Model(classes):
+def ResNet18Model(classes, image_size, dropout_rate):
   model = Sequential(name="ResNet34")
-  model.add(Input(shape=(224, 224, 3)))
+  model.add(Input(shape=(image_size, image_size, 3)))
   model.add(Conv2D(filters=64, kernel_size=7, strides=2, padding='same', name="Conv1"))   
   model.add(MaxPool2D(3, strides=2, padding='same', name="Conv2_MaxPool"))
-  model.add(ConvBlock(64, 2, 56, initial_stride = 1, pad_input = False, name="Conv2"))
-  model.add(ConvBlock(128, 2, 56, initial_stride = 2, pad_input = True, name="Conv3"))
-  model.add(ConvBlock(256, 2, 28, initial_stride = 2, pad_input = True, name="Conv4"))
-  model.add(ConvBlock(512, 2, 14, initial_stride = 2, pad_input = True, name="Conv5"))
+  model.add(ConvBlock(64, 2, image_size // 4, initial_stride = 1, pad_input = False, name="Conv2"))
+  if dropout_rate != 0:
+    model.add(Dropout(dropout_rate))
+  model.add(ConvBlock(128, 2, image_size // 4, initial_stride = 2, pad_input = True, name="Conv3"))
+  if dropout_rate != 0:
+    model.add(Dropout(dropout_rate))
+  model.add(ConvBlock(256, 2, image_size // 8, initial_stride = 2, pad_input = True, name="Conv4"))
+  if dropout_rate != 0:
+    model.add(Dropout(dropout_rate))
+  model.add(ConvBlock(512, 2, image_size // 16, initial_stride = 2, pad_input = True, name="Conv5"))
+  if dropout_rate != 0:
+    model.add(Dropout(dropout_rate))
   model.add(GlobalAveragePooling2D())
   model.add(Dense(classes, activation='softmax'))
   return model
 
 
-def create_ResNet18_model(classes):
-  return ResNet18Model(classes=classes)
+def create_ResNet18_model(classes, image_size, dropout_rate):
+  return ResNet18Model(classes=classes, image_size= image_size, dropout_rate= dropout_rate)
 
-def create_ResNet34_model(classes):
-  return ResNet34Model(classes=classes)
+def create_ResNet34_model(classes, image_size, dropout_rate):
+  return ResNet34Model(classes=classes, image_size= image_size, dropout_rate= dropout_rate)
 
-def create_ResNet50_model(classes):
-  return ResNet50(
-          include_top = True,
-          classes=classes,
-          weights = None,
-          pooling = 'avg')
+def create_ResNet50_model(classes, image_size, dropout_rate):
+  if image_size == 224:
+    return ResNet50(
+            include_top = True,
+            classes=classes,
+            weights = None,
+            pooling = 'avg')
+  else:
+    raise Exception(f"size {image_size} not supported yet.")
   
-def create_ResNet101_model(classes):
+def create_ResNet101_model(classes, image_size, dropout_rate):
   return ResNet101(
           include_top = True,
           classes=classes,
           weights = None,
           pooling = 'avg')
   
-def create_InceptionV3_model(classes):
+def create_InceptionV3_model(classes, image_size, dropout_rate):
     model = Sequential()
     model.add(InceptionV3(
-        input_shape = (224,224,3),
+        input_shape = (image_size, image_size, 3),
         include_top = False,
         weights = None,
         pooling = 'avg'))
+    if dropout_rate != 0:
+      model.add(Dropout(dropout_rate))
     model.add(Dense(classes, activation='softmax'))
     return model
 
-def create_InceptionResNetV2_model(classes):
+def create_InceptionResNetV2_model(classes, image_size, dropout_rate):
     model = Sequential()
     model.add(InceptionResNetV2(
-        input_shape = (224,224,3),
+        input_shape = (image_size,image_size,3),
         include_top = False,
         weights = None,
         pooling = 'avg'))
+    if dropout_rate != 0:
+      model.add(Dropout(dropout_rate))
     model.add(Dense(classes, activation='softmax'))
     return model
