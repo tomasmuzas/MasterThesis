@@ -161,6 +161,14 @@ def ResNet18Model(classes, image_size, dropout_rate):
   model.add(Dense(classes, activation='softmax'))
   return model
 
+def create_Custom6_model(classes, image_size, dropout_rate):
+  return Custom6Model(classes=classes, image_size= image_size, dropout_rate= dropout_rate)
+
+def create_Custom8_model(classes, image_size, dropout_rate):
+  return Custom8Model(classes=classes, image_size= image_size, dropout_rate= dropout_rate)
+
+def create_ResNet6_model(classes, image_size, dropout_rate):
+  return ResNet6Model(classes=classes, image_size= image_size, dropout_rate= dropout_rate)
 
 def create_ResNet18_model(classes, image_size, dropout_rate):
   return ResNet18Model(classes=classes, image_size= image_size, dropout_rate= dropout_rate)
@@ -176,7 +184,16 @@ def create_ResNet50_model(classes, image_size, dropout_rate):
             weights = None,
             pooling = 'avg')
   else:
-    raise Exception(f"size {image_size} not supported yet.")
+    model = Sequential()
+    model.add(ResNet50(
+        input_shape = (image_size, image_size, 3),
+        include_top = False,
+        weights = None,
+        pooling = 'avg'))
+    if dropout_rate != 0:
+      model.add(Dropout(dropout_rate))
+    model.add(Dense(classes, activation='softmax'))
+    return model
   
 def create_ResNet101_model(classes, image_size, dropout_rate):
   return ResNet101(
