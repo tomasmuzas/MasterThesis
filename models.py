@@ -52,6 +52,22 @@ def ResNet18Model(classes, image_size):
   model.add(Dense(classes, activation='softmax'))
   return model
 
+def ResNet8Model(classes, image_size):
+  model = Sequential(name="ResNet8")
+  model.add(Input(shape=(image_size, image_size, 3)))
+  model.add(Conv2D(filters=64, kernel_size=7, strides=2, padding='same', name="Conv1"))   
+  model.add(MaxPool2D(3, strides=2, padding='same', name="Conv2_MaxPool"))
+  model.add(ConvBlock(64, 1, image_size // 4, initial_stride = 1, pad_input = False, name="Conv2"))
+  model.add(ConvBlock(128, 1, image_size // 4, initial_stride = 2, pad_input = True, name="Conv3"))
+  model.add(ConvBlock(256, 1, image_size // 8, initial_stride = 2, pad_input = True, name="Conv4"))
+  model.add(ConvBlock(512, 1, image_size // 16, initial_stride = 2, pad_input = True, name="Conv5"))
+  model.add(GlobalAveragePooling2D())
+  model.add(Dense(classes, activation='softmax'))
+  return model
+
+def create_ResNet8_model(classes, image_size):
+  return ResNet8Model(classes, image_size)
+
 def create_ResNet18_model(classes, image_size):
   return ResNet18Model(classes, image_size)
 
