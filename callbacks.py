@@ -45,3 +45,14 @@ class LoggingCallback(tf.keras.callbacks.Callback):
           f = open(path + "/logs.txt", "a")
           f.write(f"loss: {logs['loss']:.4f}, categorical_accuracy: {logs['categorical_accuracy']:.4f}, val_loss: {logs['val_loss']:.4f}, val_categorical_accuracy: {logs['val_categorical_accuracy']:.4f}\n")
           f.close()
+
+class LastModelCallback(tf.keras.callbacks.Callback):
+    def __init__(self, model_name, folder_name):
+      super(LastModelCallback, self).__init__()
+      self.folder_name = folder_name
+      self.model_name = model_name
+
+    def on_epoch_end(self, epoch, logs=None):
+        if logs['categorical_accuracy'] > 0.90:
+          self.model.save(f"drive/MyDrive/MTD/Models/{self.model_name}/{self.folder_name}/last.hdf5", overwrite=True)
+          print("saving last model.")
