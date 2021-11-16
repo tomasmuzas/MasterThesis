@@ -15,15 +15,16 @@ class BestLossCallback(tf.keras.callbacks.Callback):
           print("saving model for best loss.")
 
 class BestAccuracyCallback(tf.keras.callbacks.Callback):
-    def __init__(self, model_name, folder_name):
+    def __init__(self, monitor, model_name, folder_name):
       super(BestAccuracyCallback, self).__init__()
       self.best_score = 0
       self.folder_name = folder_name
       self.model_name = model_name
+      self.monitor = monitor
 
     def on_epoch_end(self, epoch, logs=None):
-        if self.best_score < logs['val_categorical_accuracy']: 
-          self.best_score = logs['val_categorical_accuracy']
+        if self.best_score < logs[self.monitor]: 
+          self.best_score = logs[self.monitor]
           self.model.save(f"drive/MyDrive/MTD/Models/{self.model_name}/{self.folder_name}/best_accuracy.hdf5", overwrite=True)
           print("saving model for best accuracy.")
 
