@@ -53,10 +53,6 @@ def random_rotate(x, p=0.5):
     x
   return x
 
-RandomHorizontalFlip = tf.keras.layers.Lambda(lambda x: random_invert_horizontally(x))
-RandomVerticalFlip = tf.keras.layers.Lambda(lambda x: random_invert_vertically(x))
-RandomRotate = tf.keras.layers.Lambda(lambda x: random_rotate(x))
-
 def read_tf_record_dataset(path, name, preprocessing_function, image_size, batch_size, augment = False):
   filenames = tf.io.gfile.glob(path + "/{}/*.tfrec".format(name))
   dataset4 = tf.data.TFRecordDataset(filenames, num_parallel_reads=AUTO)
@@ -65,8 +61,8 @@ def read_tf_record_dataset(path, name, preprocessing_function, image_size, batch
   dataset4 = dataset4.map(lambda x, y: (tf.cast(x, tf.float32), y))
   dataset4 = dataset4.map(lambda x, y: (preprocessing_function(x), y))
   if(augment):
-    dataset4 = dataset4.map(RandomHorizontalFlip, num_parallel_calls=AUTO)
-    dataset4 = dataset4.map(RandomVerticalFlip, num_parallel_calls=AUTO)
-    dataset4 = dataset4.map(RandomRotate, num_parallel_calls=AUTO)
+    dataset4 = dataset4.map(lambda x,y : (random_invert_horizontally(x), y), num_parallel_calls=AUTO)
+    dataset4 = dataset4.map(lambda x,y : (random_invert_vertically(x), y), num_parallel_calls=AUTO)
+    dataset4 = dataset4.map(lambda x,y : (random_rotate(x), y), num_parallel_calls=AUTO)
 
   return dataset4.batch(batch_size, drop_remainder=True).prefetch(AUTO)
