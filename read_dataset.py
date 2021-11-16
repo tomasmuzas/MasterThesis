@@ -65,8 +65,8 @@ def read_tf_record_dataset(path, name, preprocessing_function, image_size, batch
   dataset4 = dataset4.map(lambda x, y: (tf.cast(x, tf.float32), y))
   dataset4 = dataset4.map(lambda x, y: (preprocessing_function(x), y))
   if(augment):
-    dataset4.map(RandomHorizontalFlip, num_parallel_calls=AUTO)
-    dataset4.map(RandomVerticalFlip, num_parallel_calls=AUTO)
-    dataset4.map(RandomRotate, num_parallel_calls=AUTO)
+    dataset4 = dataset4.map(RandomHorizontalFlip, num_parallel_calls=AUTO)
+    dataset4 = dataset4.map(RandomVerticalFlip, num_parallel_calls=AUTO)
+    dataset4 = dataset4.map(RandomRotate, num_parallel_calls=AUTO)
 
   return dataset4.batch(batch_size, drop_remainder=True).prefetch(AUTO)
