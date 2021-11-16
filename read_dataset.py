@@ -57,9 +57,9 @@ def read_tf_record_dataset(path, name, preprocessing_function, image_size, batch
   filenames = tf.io.gfile.glob(path + "/{}/*.tfrec".format(name))
   dataset4 = tf.data.TFRecordDataset(filenames, num_parallel_reads=AUTO)
   dataset4 = dataset4.map(lambda x: read_tfrecord(x, image_size), num_parallel_calls=AUTO)
-  dataset4 = dataset4.map(lambda image, class_num, label, height, width, one_hot_class: (image, one_hot_class))
-  dataset4 = dataset4.map(lambda x, y: (tf.cast(x, tf.float32), y))
-  dataset4 = dataset4.map(lambda x, y: (preprocessing_function(x), y))
+  dataset4 = dataset4.map(lambda image, class_num, label, height, width, one_hot_class: (image, class_num))
+  dataset4 = dataset4.map(lambda x, y: (tf.cast(x, tf.float32), y), num_parallel_calls=AUTO)
+  dataset4 = dataset4.map(lambda x, y: (preprocessing_function(x), y), num_parallel_calls=AUTO)
   if(augment):
     dataset4 = dataset4.map(lambda x,y : (random_invert_horizontally(x), y), num_parallel_calls=AUTO)
     dataset4 = dataset4.map(lambda x,y : (random_invert_vertically(x), y), num_parallel_calls=AUTO)
