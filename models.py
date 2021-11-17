@@ -36,7 +36,10 @@ def ResNet34Model(classes, image_size):
   model.add(ConvBlock(256, 6, image_size // 8, initial_stride = 2, pad_input = True, name="Conv4"))
   model.add(ConvBlock(512, 3, image_size // 16, initial_stride = 2, pad_input = True, name="Conv5"))
   model.add(GlobalAveragePooling2D())
-  model.add(Dense(classes, activation='softmax'))
+  if (classes == 1):
+    model.add(Dense(1, activation='sigmoid'))
+  else:
+    model.add(Dense(classes, activation='softmax'))
   return model
 
 def ResNet18Model(classes, image_size):
@@ -49,7 +52,10 @@ def ResNet18Model(classes, image_size):
   model.add(ConvBlock(256, 2, image_size // 8, initial_stride = 2, pad_input = True, name="Conv4"))
   model.add(ConvBlock(512, 2, image_size // 16, initial_stride = 2, pad_input = True, name="Conv5"))
   model.add(GlobalAveragePooling2D())
-  model.add(Dense(classes, activation='softmax'))
+  if (classes == 1):
+    model.add(Dense(1, activation='sigmoid'))
+  else:
+    model.add(Dense(classes, activation='softmax'))
   return model
 
 def ResNet8Model(classes, image_size):
@@ -62,7 +68,10 @@ def ResNet8Model(classes, image_size):
   model.add(ConvBlock(256, 1, image_size // 8, initial_stride = 2, pad_input = True, name="Conv4"))
   model.add(ConvBlock(512, 1, image_size // 16, initial_stride = 2, pad_input = True, name="Conv5"))
   model.add(GlobalAveragePooling2D())
-  model.add(Dense(classes, activation='softmax'))
+  if (classes == 1):
+    model.add(Dense(1, activation='sigmoid'))
+  else:
+    model.add(Dense(classes, activation='softmax'))
   return model
 
 def create_ResNet8_model(classes, image_size):
@@ -88,7 +97,10 @@ def create_ResNet50_model(classes, image_size):
         include_top = False,
         weights = None,
         pooling = 'avg'))
-    model.add(Dense(classes, activation='softmax'))
+    if (classes == 1):
+      model.add(Dense(1, activation='sigmoid'))
+    else:
+      model.add(Dense(classes, activation='softmax'))
     return model
   
 def create_ResNet101_model(classes, image_size):
@@ -106,7 +118,10 @@ def create_InceptionV3_model(classes, image_size):
         include_top = False,
         weights = None,
         pooling = 'avg'))
-    model.add(Dense(classes, activation='softmax'))
+    if (classes == 1):
+      model.add(Dense(1, activation='sigmoid'))
+    else:
+      model.add(Dense(classes, activation='softmax'))
     return model
 
 def create_InceptionResNetV2_model(classes, image_size):
@@ -116,5 +131,8 @@ def create_InceptionResNetV2_model(classes, image_size):
         include_top = False,
         weights = None,
         pooling = 'avg'))
-    model.add(Dense(classes, activation='softmax'))
+    if (classes == 1):
+      model.add(Dense(1, activation='sigmoid'))
+    else:
+      model.add(Dense(classes, activation='softmax'))
     return model
