@@ -52,7 +52,7 @@ def random_rotate(x, p=0.5):
     x
   return x
 
-def read_tf_record_dataset(path, preprocessing_function, image_size, batch_size, augment = False, include_objid = False):
+def read_tf_record_dataset(path, preprocessing_function, image_size, batch_size, augment = False, include_objid = False, drop_remainder = True):
   filenames = tf.io.gfile.glob(path + "/*.tfrec")
   dataset4 = tf.data.TFRecordDataset(filenames, num_parallel_reads=AUTO)
   dataset4 = dataset4.map(lambda x: read_tfrecord(x, image_size), num_parallel_calls=AUTO)
@@ -73,4 +73,4 @@ def read_tf_record_dataset(path, preprocessing_function, image_size, batch_size,
       dataset4 = dataset4.map(lambda x,y : (random_invert_vertically(x), y), num_parallel_calls=AUTO)
       dataset4 = dataset4.map(lambda x,y : (random_rotate(x), y), num_parallel_calls=AUTO)
 
-  return dataset4.batch(batch_size, drop_remainder=True).prefetch(AUTO)
+  return dataset4.batch(batch_size, drop_remainder=drop_remainder).prefetch(AUTO)
