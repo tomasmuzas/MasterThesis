@@ -72,7 +72,7 @@ def read_tf_record_dataset(path, preprocessing_function, image_size, batch_size,
       dataset4 = dataset4.map(lambda x,y,z : (random_invert_horizontally(x), y, z), num_parallel_calls=AUTO)
       dataset4 = dataset4.map(lambda x,y,z : (random_invert_vertically(x), y, z), num_parallel_calls=AUTO)
       dataset4 = dataset4.map(lambda x,y,z : (random_rotate(x), y, z), num_parallel_calls=AUTO)
-      dataset4 = dataset4.map(lambda x,y,z : (tf.keras.layers.RandomZoom((-0.1, 0), (-0.1, 0))(x), y, z), num_parallel_calls=AUTO)
+      dataset4 = dataset4.map(lambda x,y,z : (tf.keras.preprocessing.image.random_zoom(x, (-0.1, 0)), y, z), num_parallel_calls=AUTO)
   else:
     dataset4 = dataset4.map(lambda image, class_num, label, objid, one_hot_class: (image, class_num))
     dataset4 = dataset4.map(lambda x, y: (tf.cast(x, tf.float32), y), num_parallel_calls=AUTO)
@@ -81,6 +81,6 @@ def read_tf_record_dataset(path, preprocessing_function, image_size, batch_size,
       dataset4 = dataset4.map(lambda x,y : (random_invert_horizontally(x), y), num_parallel_calls=AUTO)
       dataset4 = dataset4.map(lambda x,y : (random_invert_vertically(x), y), num_parallel_calls=AUTO)
       dataset4 = dataset4.map(lambda x,y : (random_rotate(x), y), num_parallel_calls=AUTO)
-      dataset4 = dataset4.map(lambda x,y : (tf.keras.layers.RandomZoom((-0.1, 0), (-0.1, 0))(x), y), num_parallel_calls=AUTO)
+      dataset4 = dataset4.map(lambda x,y : (tf.keras.preprocessing.image.random_zoom(x, (-0.1, 0)), y), num_parallel_calls=AUTO)
 
   return dataset4.batch(batch_size, drop_remainder=drop_remainder).prefetch(AUTO)
